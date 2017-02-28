@@ -47,11 +47,13 @@ function onAcceptError (info) {
 }
 
 function onReceive (info) {
-  if (info.socketId in sockets) {
+  console.debug("onReceive: ", info);
+  if (info.socketId in sockets)
     sockets[info.socketId]._onReceive(info.data)
-  } else {
+  else if ('socketId' in info.data and info.data.socketId in sockets)
+    sockets[info.socketId]._onReceive(info.data)
+  else
     console.error('Unknown socket id: ' + info.socketId)
-  }
 }
 
 function onReceiveError (info) {
